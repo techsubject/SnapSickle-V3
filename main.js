@@ -1,11 +1,18 @@
 (() => {
   "use strict";
   const WASM_BUILD = "236a06dc9063b747832944747c8d9f6c.wasm.br";
-  const KEYS = { xz: "__dcgs_snap_xz", y: "__dcgs_snap_y" };
-  const DEFAULTS = { xz: 15, y: 15 };
-  const LIMITS = { xz: [1, 30], y: [1, 30] };
+  const KEYS = { xz: "__dcgs_snap_xz", y: "__dcgs_snap_y", rotation: "__dcgs_rotation_step" };
+  const DEFAULTS = { xz: 15, y: 15, rotation: 90 };
+  const LIMITS = { xz: [1, 30], y: [1, 30], rotation: [1, 359] };
+  const ROTATION_FUNCTIONS = [58120, 58127]; // ObjectPlacement.EditModeUpdate and MoveCursor
+  const ROTATE_Y_90 = [
+    0x43,0x00,0x00,0x00,0x00, // f32.const 0 (X)
+    0x43,0x00,0x00,0xb4,0x42, // f32.const 90 (Y)
+    0x43,0x00,0x00,0x00,0x00, // f32.const 0 (Z)
+    0x41,0x00,0x10,0xc8,0xf3,0x04 // call Transform.Rotate (function 80328)
+  ];
 
-  // Patch grid spacing and keep camera/object level spacing in sync with Y.
+  // Patch grid spacing, camera/object level spacing, and the editor rotation step.
   // The game clamps editor levels to 100; raise both clamp operands to a
   // practical test ceiling so the camera can follow well beyond Y=1500.
   const SITES = [
@@ -62,6 +69,25 @@
   function concat(parts) {
     const length=parts.reduce((n,p)=>n+p.length,0), out=new Uint8Array(length); let at=0;
     for(const part of parts){out.set(part,at);at+=part.length;} return out;
+  }
+  function findSequences(bytes, sequence) {
+    const matches=[];
+    for(let i=0;i<=bytes.length-sequence.length;i++) {
+      let found=true;
+      for(let j=0;j<sequence.length;j++) if(bytes[i+j]!==sequence[j]) { found=false; break; }
+      if(found) matches.push(i);
+    }
+    return matches;
+  }
+  function addRotationEdits(bodies, degrees) {
+    for(const functionIndex of ROTATION_FUNCTIONS) {
+      const body=bodies.find(candidate=>candidate.functionIndex===functionIndex);
+      if(!body) throw new Error(`Rotation function ${functionIndex} not found`);
+      const matches=findSequences(body.bytes,ROTATE_Y_90);
+      if(matches.length!==1) throw new Error(`Expected one 90-degree Transform.Rotate anchor in function ${functionIndex}; found ${matches.length}`);
+      const at=body.start+matches[0]+5; // replace the 90-degree f32.const only
+      body.edits.push({at,oldLength:5,replacement:new Uint8Array([0x43,...encodeF32(degrees)]),baseOffset:at});
+    }
   }
   function gridTextureInjection(xz) {
     const tiling=1500/xz; // fixed 1500-unit grid footprint; base material is 100 at X/Z snap 15
@@ -177,6 +203,10 @@
         }
       }
 
+      // Replace only the editor's two verified Transform.Rotate(0, 90, 0) steps.
+      // Function-relative anchors tolerate the supplied WASM variants' differing body lengths.
+      addRotationEdits(bodies,values.rotation);
+
       // BuildSettings.grid is the visible grid object. Set the child Grid material's
       // texture tiling at the ApplySettings point, retaining the plane size.
       const gridBody=bodies.find(b=>b.functionIndex===58206);
@@ -219,7 +249,7 @@
     let originalBytes;
     try {
       originalBytes=await response.arrayBuffer();
-      const values={xz:readSetting("xz"),y:readSetting("y")};
+      const values={xz:readSetting("xz"),y:readSetting("y"),rotation:readSetting("rotation")};
       const result=patchWasm(originalBytes,values);
       if(!result.ok) {
         console.warn(`[DashCraft Grid Snap] WASM was not patched (${result.reason}); original bytes are preserved.`);
@@ -230,7 +260,8 @@
       document.documentElement?.setAttribute("data-dcgs-patch","applied");
       document.documentElement?.setAttribute("data-dcgs-xz",String(values.xz));
       document.documentElement?.setAttribute("data-dcgs-y",String(values.y));
-      console.info(`[SnapSickle Grid Snap 1.0 test13] X/Z: ${values.xz}; Y: ${values.y}.`);
+      document.documentElement?.setAttribute("data-dcgs-rotation",String(values.rotation));
+      console.info(`[SnapSickle Grid Snap 3.0.0] X/Z: ${values.xz}; Y: ${values.y}; rotation step: ${values.rotation} degrees.`);
       return makeResponse(result.bytes,response);
     } catch(error) {
       console.error("[DashCraft Grid Snap] Patch failed; original game code remains available.",error);

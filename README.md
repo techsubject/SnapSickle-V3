@@ -2,15 +2,16 @@
 
 ![SnapSickle logo](logo.svg)
 
-SnapSickle adds adjustable X/Z and Y placement snapping to DashCraft's track editor. The grid spacing and vertical placement plane follow the selected settings, so blocks can be positioned at higher Y levels while remaining aligned to the mouse.
+SnapSickle adds adjustable X/Z and Y placement snapping plus a custom rotation step to DashCraft's track editor. The grid spacing and vertical placement plane follow the selected settings, so blocks can be positioned at higher Y levels while remaining aligned to the mouse.
 
-**Current build:** v1.0 test13 (extension version 1.0.13)
+**Current build:** v3.0.0 (extension version 3.0.0)
 
 ## Features
 
 - Set horizontal X/Z snap spacing and vertical Y spacing from 1 to 30 units.
 - Keep the visible grid footprint steady while its cell spacing follows the X/Z setting.
 - Match the placement plane, object levels, and camera level spacing to the selected Y step.
+- Set the angle applied by each rotate action from 1° to 359° (default 90°).
 - Keep DashCraft's original cursor raycast and movement behavior.
 - See whether the WASM patch was applied or why it could not be applied.
 
@@ -30,7 +31,7 @@ Keep the extracted folder in place while the extension is installed. After downl
 
 1. Open [DashCraft](https://dashcraft.io/) and enter the track editor.
 2. Press **Ctrl** to open or close the SnapSickle panel.
-3. Adjust **X/Z snap spacing** and **Y snap spacing**.
+3. Adjust **X/Z snap spacing**, **Y snap spacing**, and **Rotation step**.
 4. Save your track, then reload DashCraft completely. The WASM settings apply when the game loads; slider changes do not alter an already-running game instance.
 5. Reopen the editor and check the panel status. It should show **WASM patch active** and the selected values.
 
@@ -55,7 +56,7 @@ The patch is tied to the DashCraft WASM build this version was made for. A chang
 
 ### A setting does not take effect
 
-Save the track and perform a full page reload after changing either slider. The panel status confirms that the patch was applied to the WASM response; it does not report the values of individual placed objects.
+Save the track and perform a full page reload after changing a slider. The panel status confirms the selected rotation step in the WASM patch; it does not report the rotation of individual placed objects.
 
 ## Permissions and data
 
@@ -67,5 +68,5 @@ This is an unpacked Manifest V3 browser extension. Its entry points are `main.js
 
 ## Version
 
-- Manifest version: `1.0.13`
-- In-panel label: `v1.0 test13`
+- Manifest version: `3.0.0`
+- In-panel label: `v3.0.0`

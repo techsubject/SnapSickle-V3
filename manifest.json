@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "SnapSickle Grid Snap",
-  "version": "1.0.13",
-  "description": "Adjust DashCraft X/Z and Y snapping, grid spacing, and vertical placement.",
+  "version": "3.0.0",
+  "description": "Adjust DashCraft X/Z and Y snapping, grid spacing, vertical placement, and rotation steps.",
   "permissions": [
     "storage"
   ],

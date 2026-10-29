@@ -1,10 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-<rect width="256" height="256" rx="20" fill="#ffffff"/>
-<g fill="none" stroke="#4a9fd0" stroke-width="9" stroke-linecap="square" stroke-linejoin="miter">
+<g fill="none" stroke="#bfc1c5" stroke-width="9" stroke-linecap="square" stroke-linejoin="miter">
 <path d="M24 24H224V224H24Z"/>
 <path d="M88 24V224M154 24V224M24 88H224M24 154H224"/>
 </g>
-<path d="M122 13 C157 36 174 68 176 100 C179 132 164 160 143 187 L116 235 L145 235 L171 190 C194 158 210 125 205 91 C201 58 171 28 122 13Z" fill="#ffffff"/>
-<path d="M132 16 C162 43 176 69 177 99 C178 126 165 153 146 179 L121 232 L146 232 L173 185 C194 153 207 123 202 92 C197 61 169 31 132 16Z" fill="#4a9fd0"/>
-<path d="M143 29 C168 53 183 79 184 103 C185 127 172 151 155 174 L138 207 C166 177 193 140 192 103 C191 75 173 48 143 29Z" fill="#ffffff"/>
+<path d="M122 13 C157 36 174 68 176 100 C179 132 164 160 143 187 L116 235 L145 235 L171 190 C194 158 210 125 205 91 C201 58 171 28 122 13Z" fill="#292a2d"/>
+<path d="M132 16 C162 43 176 69 177 99 C178 126 165 153 146 179 L121 232 L146 232 L173 185 C194 153 207 123 202 92 C197 61 169 31 132 16Z" fill="#d6d7da"/>
+<path d="M143 29 C168 53 183 79 184 103 C185 127 172 151 155 174 L138 207 C166 177 193 140 192 103 C191 75 173 48 143 29Z" fill="#292a2d"/>
 </svg>
