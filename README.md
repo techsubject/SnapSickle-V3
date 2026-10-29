@@ -67,5 +67,5 @@ This is an unpacked Manifest V3 browser extension. Its entry points are `main.js
 
 ## Version
 
-- Manifest version: `1.0.13`
+- Manifest version: `1.0.0`
 - In-panel label: `v1.0 test13`
