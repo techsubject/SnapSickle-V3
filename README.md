@@ -56,11 +56,11 @@ The patch is tied to the DashCraft WASM build this version was made for. A chang
 
 ### A setting does not take effect
 
-Save the track and perform a full page reload after changing a slider. The panel status confirms the selected rotation step in the WASM patch; it does not report the rotation of individual placed objects.
+Save the track and perform a full page reload after changing a slider. The panel status confirms the selected rotation step in the WASM patch; it does not report the rotation of individual placed objects. If it doesn't work with ground blocks it's because of a groundblocksolver issue, and can not be taken care of.
 
 ## Permissions and data
 
-SnapSickle runs on `https://dashcraft.io/*` and uses the browser's local extension storage for its settings. It modifies the WASM response in memory as DashCraft loads it; it does not overwrite the game's downloaded files. The extension does not send slider settings to a SnapSickle server.
+SnapSickle runs on `https://dashcraft.io/*` and uses the browser's local extension storage for its settings. It modifies the WASM response in memory as DashCraft loads it; it does not overwrite the game's downloaded files. The extension does not send slider settings to a SnapSickle server. Tracks that make use of this mod are not allowed to get verified.
 
 ## Development
 
